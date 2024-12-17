@@ -1,39 +1,61 @@
-//header elements
+
 const header = document.querySelector('header');
 const heading = header.querySelector('h1');
 const computerScore = header.querySelector('.cScore');
 const playerScore = header.querySelector('.pScore');
-const resetButton = header.querySelector('button');
-
-//main elements
 const main = document.querySelector('main');
 const rockButton = main.querySelector('.rock');
 const paperButton = main.querySelector('.paper');
 const scissorButton = main.querySelector('.Scissor');
+const resetButton = main.querySelector('.reset'); 
+const resultDisplay = main.querySelector('h2');
 
-// Function to log the user's choice
-function playerChoice(choice) {
-    console.log(`${choice}`);
-}
+let playerScoreValue = 0;
+let computerScoreValue = 0;
 
-// Add event listeners to user buttons
-rockButton.addEventListener('click', () => playerChoice('Rock'));
-paperButton.addEventListener('click', () => playerChoice('Paper'));
-scissorButton.addEventListener('click', () => playerChoice('Scissor'));
-
-
-function RandomChoice() {
+// Function to get random choice for the computer
+function getRandomChoice() {
     const choices = ['Rock', 'Paper', 'Scissor'];
-    const random = Math.floor(Math.random() * choices.length);
-    return choices[random];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
 }
 
-console.log(RandomChoice());
+// Function to get the winner
+function playRound(playerChoice) {
+    const computerChoice = getRandomChoice();
+    
+    if (playerChoice === computerChoice) {
+        resultDisplay.textContent = `It's a draw! Both chose ${playerChoice}.`;
+        return;
+    }
+
+    if (
+        (playerChoice === 'Rock' && computerChoice === 'Scissor') ||
+        (playerChoice === 'Paper' && computerChoice === 'Rock') ||
+        (playerChoice === 'Scissor' && computerChoice === 'Paper')
+    ) {
+        playerScoreValue++;
+        playerScore.textContent = playerScoreValue;
+        resultDisplay.textContent = `You Win! ${playerChoice} beats ${computerChoice}.`;
+    } else {
+        computerScoreValue++;
+        computerScore.textContent = computerScoreValue;
+        resultDisplay.textContent = `You Lose! ${computerChoice} beats ${playerChoice}.`;
+    }
+}
+
+rockButton.addEventListener('click', () => playRound('Rock'));
+paperButton.addEventListener('click', () => playRound('Paper'));
+scissorButton.addEventListener('click', () => playRound('Scissor'));
 
 
-if (playerChoice()===RandomChoice()){
-    console.log("nice")
-}   else{"lol"}
+resetButton.addEventListener('click', () => {
+    playerScoreValue = 0;
+    computerScoreValue = 0;
+    playerScore.textContent = playerScoreValue;
+    computerScore.textContent = computerScoreValue;
+    resultDisplay.textContent = '';
+});
 
 
 
